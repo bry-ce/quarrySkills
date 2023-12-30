@@ -4,6 +4,7 @@ import me.packwatch.quarryskills.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,6 +23,8 @@ public class skillsCommand implements CommandExecutor {
         if (commandSender instanceof Player){
 
             Player p = (Player) commandSender;
+
+            // p.playSound(Sound.BLOCK_CHEST_OPEN, 1);
 
             Inventory mainGui = Bukkit.createInventory(p, 27, ChatColor.DARK_GRAY + "Skills");
 
