@@ -1,0 +1,8 @@
+name: quarrySkills
+version: '${project.version}'
+main: me.packwatch.quarryskills.QuarrySkills
+api-version: '1.20'
+commands:
+  skills:
+    description: Open skills menu.
+    
