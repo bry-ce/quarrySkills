@@ -1,18 +1,40 @@
 package me.packwatch.quarryskills;
 
-import me.packwatch.quarryskills.commands.skillsCommand;
+import me.packwatch.quarryskills.commands.SkillsCommand;
+import me.packwatch.quarryskills.db.Database;
+import me.packwatch.quarryskills.events.InvInteractListener;
+import me.packwatch.quarryskills.events.JoinListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.sql.SQLException;
+
 public final class QuarrySkills extends JavaPlugin {
+    private Database database;
 
     @Override
     public void onEnable() {
+        //mySQL database connection
+
+        try{
+            this.database = new Database();
+            database.initDatabase();
+            System.out.println("[QUARRYDATABASECONNECTION]: Success!");
+        }catch (SQLException ex){
+            System.out.println("[QUARRYDATABASECONNECTION]: Unable to connect to QuarryMC database.");
+            throw new RuntimeException(ex);
+        }
+
+
+
+
+
         // Plugin startup logic
-        getCommand("skills").setExecutor(new skillsCommand());
+        getCommand("skills").setExecutor(new SkillsCommand(this));
+        getServer().getPluginManager().registerEvents(new InvInteractListener(), this);
+        getServer().getPluginManager().registerEvents(new JoinListener(this), this);
     }
 
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
+    public Database getDatabase() {
+        return database;
     }
 }

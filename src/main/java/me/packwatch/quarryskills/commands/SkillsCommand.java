@@ -1,31 +1,40 @@
 package me.packwatch.quarryskills.commands;
 
+import me.packwatch.quarryskills.QuarrySkills;
+import me.packwatch.quarryskills.model.PlayerData;
 import me.packwatch.quarryskills.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import sun.nio.ch.Util;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class skillsCommand implements CommandExecutor {
+import static java.lang.String.valueOf;
 
+public class SkillsCommand implements CommandExecutor {
+
+    private final QuarrySkills plugin;
+
+    public SkillsCommand(QuarrySkills plugin) {
+        this.plugin = plugin;
+
+    }
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
 
         if (commandSender instanceof Player){
 
             Player p = (Player) commandSender;
+
+            double pFortune = this.plugin.getDatabase().fetchFortuneByUUID(1, p.getUniqueId().toString());
 
             // p.playSound(Sound.BLOCK_CHEST_OPEN, 1);
 
@@ -42,9 +51,11 @@ public class skillsCommand implements CommandExecutor {
             geologyLore.add(Utils.chat(""));
             geologyLore.add(Utils.chat("&7The geology skill increases your &6Fortune&7!"));
             geologyLore.add(Utils.chat("&7Progress: &f%geoprogress%"));
-            geologyLore.add(Utils.chat("&7Your current bonus: &6%fortune%"));
-            geologyLore.add(Utils.chat("&7next bonus: &6%(fortune + .1)%"));
+            geologyLore.add(Utils.chat("&7Your current bonus: "+ pFortune ));
+            geologyLore.add(Utils.chat("&7next bonus: &6" + String.valueOf((double) (Math.round(pFortune*100)/100 +.1))));
             geologyLore.add(Utils.chat(""));
+            geologyLore.add(Utils.chat("&8&o(click to expand)"));
+
 
             geologyMeta.setLore(geologyLore);
             geology.setItemMeta(geologyMeta);
@@ -53,11 +64,12 @@ public class skillsCommand implements CommandExecutor {
 
             ArrayList<String> spelunkerLore = new ArrayList<>();
             spelunkerLore.add(Utils.chat(""));
-            spelunkerLore.add(Utils.chat("&7The spelunker skill increases your &btreasure find&7!"));
+            spelunkerLore.add(Utils.chat("&7The spelunker skill increases your &bTreasure Find&7!"));
             spelunkerLore.add(Utils.chat("&7Progress: &f%spelprogress%"));
-            spelunkerLore.add(Utils.chat("&7Your current bonus: &6%treasurefind%"));
-            spelunkerLore.add(Utils.chat("&7next bonus: &6%(treasurefind + .05)%"));
+            spelunkerLore.add(Utils.chat("&7Your current bonus: &b%treasurefind%"));
+            spelunkerLore.add(Utils.chat("&7next bonus: &b%(treasurefind + .05)%"));
             spelunkerLore.add(Utils.chat(""));
+            spelunkerLore.add(Utils.chat("&8&o(click to expand)"));
 
             spelunkerMeta.setDisplayName(Utils.chat("&bSpelunker"));
             spelunkerMeta.setLore(spelunkerLore);
@@ -69,17 +81,27 @@ public class skillsCommand implements CommandExecutor {
             demoLitionistLore.add(Utils.chat(""));
             demoLitionistLore.add(Utils.chat("&7The demolitionist skill increases your &cSwing Strength&7!"));
             demoLitionistLore.add(Utils.chat("&7Progress: &f%demoprogress%"));
-            demoLitionistLore.add(Utils.chat("&7Your current bonus: &6%swingstrength%"));
-            demoLitionistLore.add(Utils.chat("&7next bonus: &6%(swingstrength + 1)%"));
+            demoLitionistLore.add(Utils.chat("&7Your current bonus: &c%swingstrength%"));
+            demoLitionistLore.add(Utils.chat("&7next bonus: &c%(swingstrength + 1)%"));
             demoLitionistLore.add(Utils.chat(""));
+            demoLitionistLore.add(Utils.chat("&8&o(click to expand)"));
+
 
             demolitionistMeta.setDisplayName(Utils.chat("&bDemolitionist"));
             demolitionistMeta.setLore(demoLitionistLore);
             demolitionist.setItemMeta(demolitionistMeta);
 
 
+            ItemStack graypane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+            ItemMeta m = graypane.getItemMeta();
+
+            m.setDisplayName("");
+            graypane.setItemMeta(m);
+
             for(int i = 0; i < mainGui.getSize(); i++){
-                mainGui.setItem(i, new ItemStack(Material.GRAY_STAINED_GLASS_PANE));
+                if(i != 11 && i != 13 && i != 15) {
+                    mainGui.setItem(i, graypane);
+                }
             }
 
             mainGui.setItem(11, geology);

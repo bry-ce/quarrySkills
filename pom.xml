@@ -40,6 +40,14 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.4</version>
+            <configuration>
+                <outputDirectory>C:\Users\bwime\OneDrive\Desktop\testServer\plugins</outputDirectory>
+            </configuration>
+      </plugin>
     </plugins>
     <resources>
       <resource>

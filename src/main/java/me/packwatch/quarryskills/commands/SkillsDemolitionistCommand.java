@@ -1,4 +1,4 @@
 package me.packwatch.quarryskills.commands;
 
-public class skillsDemolitionistCommand {
+public class SkillsDemolitionistCommand {
 }
