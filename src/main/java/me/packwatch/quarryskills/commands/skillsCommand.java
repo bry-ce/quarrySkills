@@ -14,6 +14,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import sun.nio.ch.Util;
+
+import java.util.ArrayList;
 
 public class skillsCommand implements CommandExecutor {
 
@@ -35,21 +38,47 @@ public class skillsCommand implements CommandExecutor {
 
             ItemMeta geologyMeta = geology.getItemMeta();
             geologyMeta.setDisplayName(Utils.chat("&bGeology"));
+            ArrayList<String> geologyLore = new ArrayList<>();
+            geologyLore.add(Utils.chat(""));
+            geologyLore.add(Utils.chat("&7The geology skill increases your &6Fortune&7!"));
+            geologyLore.add(Utils.chat("&7Progress: &f%geoprogress%"));
+            geologyLore.add(Utils.chat("&7Your current bonus: &6%fortune%"));
+            geologyLore.add(Utils.chat("&7next bonus: &6%(fortune + .1)%"));
+            geologyLore.add(Utils.chat(""));
 
+            geologyMeta.setLore(geologyLore);
             geology.setItemMeta(geologyMeta);
 
-            ItemMeta spelunkerMeta = geology.getItemMeta();
-            geologyMeta.setDisplayName(Utils.chat("&Spelunker"));
+            ItemMeta spelunkerMeta = spelunker.getItemMeta();
 
-            geology.setItemMeta(spelunkerMeta);
+            ArrayList<String> spelunkerLore = new ArrayList<>();
+            spelunkerLore.add(Utils.chat(""));
+            spelunkerLore.add(Utils.chat("&7The spelunker skill increases your &btreasure find&7!"));
+            spelunkerLore.add(Utils.chat("&7Progress: &f%spelprogress%"));
+            spelunkerLore.add(Utils.chat("&7Your current bonus: &6%treasurefind%"));
+            spelunkerLore.add(Utils.chat("&7next bonus: &6%(treasurefind + .05)%"));
+            spelunkerLore.add(Utils.chat(""));
 
-            ItemMeta demolitionistMeta = geology.getItemMeta();
-            geologyMeta.setDisplayName(Utils.chat("&Demolitionist"));
+            spelunkerMeta.setDisplayName(Utils.chat("&bSpelunker"));
+            spelunkerMeta.setLore(spelunkerLore);
+            spelunker.setItemMeta(spelunkerMeta);
 
-            geology.setItemMeta(demolitionistMeta);
+            ItemMeta demolitionistMeta = demolitionist.getItemMeta();
+
+            ArrayList<String> demoLitionistLore = new ArrayList<>();
+            demoLitionistLore.add(Utils.chat(""));
+            demoLitionistLore.add(Utils.chat("&7The demolitionist skill increases your &cSwing Strength&7!"));
+            demoLitionistLore.add(Utils.chat("&7Progress: &f%demoprogress%"));
+            demoLitionistLore.add(Utils.chat("&7Your current bonus: &6%swingstrength%"));
+            demoLitionistLore.add(Utils.chat("&7next bonus: &6%(swingstrength + 1)%"));
+            demoLitionistLore.add(Utils.chat(""));
+
+            demolitionistMeta.setDisplayName(Utils.chat("&bDemolitionist"));
+            demolitionistMeta.setLore(demoLitionistLore);
+            demolitionist.setItemMeta(demolitionistMeta);
 
 
-            for(int i = 0; i < mainGui.getSize()-1; i++){
+            for(int i = 0; i < mainGui.getSize(); i++){
                 mainGui.setItem(i, new ItemStack(Material.GRAY_STAINED_GLASS_PANE));
             }
 
