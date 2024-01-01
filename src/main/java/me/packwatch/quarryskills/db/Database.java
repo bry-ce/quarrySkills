@@ -64,6 +64,8 @@ public class Database {
         return null;
     }
 
+
+
     public void createPlayerData(PlayerData pd) throws SQLException{
         PreparedStatement statement = getConnection()
                 .prepareStatement("INSERT INTO player_data (uuid, shards, coins, pebbles, fortune, treasure_find, swing_strength) VALUES (?,?,?,?,?,?,?)");
@@ -82,7 +84,7 @@ public class Database {
 
     public void createPlayerSkillXP(PlayerSkillXP pxp) throws SQLException {
         PreparedStatement statement = getConnection()
-                .prepareStatement("INSERT INTO player_data (uuid, gelogist_xp, geologist_level, spelunker_xp, spelunker_level, demolitionist_xp, demolitionist_level) VALUES (?,?,?,?,?,?,?)");
+                .prepareStatement("INSERT INTO player_skill_xp (uuid, geologist_xp, geologist_level, spelunker_xp, spelunker_level, demolitionist_xp, demolitionist_level) VALUES (?,?,?,?,?,?,?)");
 
         statement.setString(1, pxp.getUuid());
         statement.setInt(3, pxp.getGeologistLevel());
@@ -94,6 +96,30 @@ public class Database {
 
         statement.executeUpdate();
         statement.close();
+    }
+
+    public PlayerSkillXP findPlayerSkillXpByUUID(String uuid) throws SQLException {
+        PreparedStatement statement = getConnection().prepareStatement("SELECT * FROM player_skill_xp WHERE uuid = ?");
+        statement.setString(1,uuid);
+
+        ResultSet results = statement.executeQuery();
+
+
+
+        if (results.next()){
+            int geolvl = results.getInt("shards");
+            int spellvl = results.getInt("coins");
+            int demolvl = results.getInt("pebbles");
+            double geoxp = results.getDouble("fortune");
+            double spelxp = results.getDouble("treasure_find");
+            double demoxp = results.getDouble("swing_strength");
+
+            PlayerSkillXP pxp = new PlayerSkillXP(uuid, geoxp, spelxp, demoxp, geolvl, spellvl, demolvl);
+            statement.close();
+
+            return pxp;
+        }
+        return null;
     }
 
     public double fetchFortuneByUUID(String uuid) {
