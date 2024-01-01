@@ -1,6 +1,7 @@
 package me.packwatch.quarryskills.db;
 
 import me.packwatch.quarryskills.model.PlayerData;
+import me.packwatch.quarryskills.model.PlayerSkillXP;
 import org.bukkit.entity.Player;
 
 import javax.swing.plaf.nimbus.State;
@@ -28,11 +29,14 @@ public class Database {
 
     public void initDatabase() throws SQLException{
 
-        Statement statement = getConnection().createStatement();
+        Statement playerdatastatement = getConnection().createStatement();
         String sql = "CREATE TABLE IF NOT EXISTS player_data(uuid varchar(36) primary key, shards int, coins double, pebbles int, fortune double, treasure_find double, swing_strength int)";
-        statement.execute(sql);
+        playerdatastatement.execute(sql);
+        playerdatastatement.close();
 
-        statement.close();
+        PreparedStatement  skillxpstatement = getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS player_skill_xp(uuid varchar(36) primary key, geologist_xp double, geologist_level int, spelunker_xp double, spelunker_level int, demolitionist_xp double, demolitionist_level int)");
+        skillxpstatement.execute();
+        skillxpstatement.close();
 
     }
 
@@ -76,60 +80,33 @@ public class Database {
         statement.close();
     }
 
-    public String fetchStringByUUID(String column, String uuid) {
-        PreparedStatement statement = null;
-        try {
-            statement = getConnection()
-                    .prepareStatement("SELECT ? FROM player_data WHERE uuid = ?");
+    public void createPlayerSkillXP(PlayerSkillXP pxp) throws SQLException {
+        PreparedStatement statement = getConnection()
+                .prepareStatement("INSERT INTO player_data (uuid, gelogist_xp, geologist_level, spelunker_xp, spelunker_level, demolitionist_xp, demolitionist_level) VALUES (?,?,?,?,?,?,?)");
 
-            ResultSet results = statement.executeQuery();
+        statement.setString(1, pxp.getUuid());
+        statement.setInt(3, pxp.getGeologistLevel());
+        statement.setDouble(2, pxp.getGeologistXp());
+        statement.setInt(5, pxp.getSpelunkerLevel());
+        statement.setDouble(4, pxp.getSpelunkerXp());
+        statement.setInt(7, pxp.getDemolitionistLevel());
+        statement.setDouble(6, pxp.getDemolitionistXp());
 
-            statement.setString(1, column);
-            statement.setString(2, uuid);
-
-
-            String s = results.getNString(column);
-            statement.close();
-            return s;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-    public int fetchIntByUUID(String column, String uuid) {
-        PreparedStatement statement = null;
-
-        try {
-
-            statement = getConnection()
-                    .prepareStatement("SELECT ? FROM player_data WHERE uuid = ?");
-
-            ResultSet results = statement.executeQuery();
-
-            statement.setString(1, column);
-            statement.setString(2, uuid);
-
-
-            int i = results.getInt(column);
-            statement.close();
-            return i;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        statement.executeUpdate();
+        statement.close();
     }
 
-    public double fetchFortuneByUUID(int column, String uuid) {
+    public double fetchFortuneByUUID(String uuid) {
         PreparedStatement statement = null;
         try {
             statement = getConnection()
                     .prepareStatement("SELECT fortune FROM player_data WHERE uuid = ?");
 
-
             statement.setString(1, uuid);
             ResultSet results = statement.executeQuery();
 
             if(results.next()) {
-                double d = results.getDouble(column);
+                double d = results.getDouble(1);
                 statement.close();
                 return d;
             }
@@ -140,5 +117,121 @@ public class Database {
             throw new RuntimeException(e);
         }
     }
+
+    public double fetchGeoXpByUUID(String uuid){
+        PreparedStatement statement = null;
+        try {
+            statement = getConnection()
+                    .prepareStatement("SELECT geologist_xp FROM player_skill_xp WHERE uuid = ?");
+
+
+            statement.setString(1, uuid);
+            ResultSet results = statement.executeQuery();
+
+            if(results.next()) {
+                double d = results.getDouble(1);
+                statement.close();
+                return d;
+            }
+
+            return 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public double fetchTreasureFindByUUID(String uuid){
+        PreparedStatement statement = null;
+        try {
+            statement = getConnection()
+                    .prepareStatement("SELECT treasure_find FROM player_data WHERE uuid = ?");
+
+
+            statement.setString(1, uuid);
+            ResultSet results = statement.executeQuery();
+
+            if(results.next()) {
+                double d = results.getDouble(1);
+                statement.close();
+                return d;
+            }
+
+            return 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public double fetchSpelunkerXpByUUID(String uuid){
+        PreparedStatement statement = null;
+        try {
+            statement = getConnection()
+                    .prepareStatement("SELECT spelunker_xp FROM player_skill_xp WHERE uuid = ?");
+
+
+            statement.setString(1, uuid);
+            ResultSet results = statement.executeQuery();
+
+            if(results.next()) {
+                double d = results.getDouble(1);
+                statement.close();
+                return d;
+            }
+
+            return 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public int fetchSwingStrengthByUUID(String uuid){
+        PreparedStatement statement = null;
+        try {
+            statement = getConnection()
+                    .prepareStatement("SELECT swing_strength FROM player_data WHERE uuid = ?");
+
+
+            statement.setString(1, uuid);
+            ResultSet results = statement.executeQuery();
+
+            if(results.next()) {
+                int i = results.getInt(1);
+                statement.close();
+                return i;
+            }
+
+            return 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public double fetchDemoXpByUUID(String uuid){
+        PreparedStatement statement = null;
+        try {
+            statement = getConnection()
+                    .prepareStatement("SELECT demolitionist_xp FROM player_skill_xp WHERE uuid = ?");
+
+
+            statement.setString(1, uuid);
+            ResultSet results = statement.executeQuery();
+
+            if(results.next()) {
+                double d = results.getDouble(1);
+                statement.close();
+                return d;
+            }
+
+            return 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
 

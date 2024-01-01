@@ -24,10 +24,6 @@ public final class QuarrySkills extends JavaPlugin {
             throw new RuntimeException(ex);
         }
 
-
-
-
-
         // Plugin startup logic
         getCommand("skills").setExecutor(new SkillsCommand(this));
         getServer().getPluginManager().registerEvents(new InvInteractListener(), this);

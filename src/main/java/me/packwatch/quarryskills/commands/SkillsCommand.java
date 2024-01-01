@@ -34,7 +34,9 @@ public class SkillsCommand implements CommandExecutor {
 
             Player p = (Player) commandSender;
 
-            double pFortune = this.plugin.getDatabase().fetchFortuneByUUID(1, p.getUniqueId().toString());
+            double pFortune = this.plugin.getDatabase().fetchFortuneByUUID(p.getUniqueId().toString());
+            int pSwingStrength = this.plugin.getDatabase().fetchSwingStrengthByUUID(p.getUniqueId().toString());
+            double pTreasureFind = this.plugin.getDatabase().fetchTreasureFindByUUID(p.getUniqueId().toString());
 
             // p.playSound(Sound.BLOCK_CHEST_OPEN, 1);
 
@@ -66,8 +68,8 @@ public class SkillsCommand implements CommandExecutor {
             spelunkerLore.add(Utils.chat(""));
             spelunkerLore.add(Utils.chat("&7The spelunker skill increases your &bTreasure Find&7!"));
             spelunkerLore.add(Utils.chat("&7Progress: &f%spelprogress%"));
-            spelunkerLore.add(Utils.chat("&7Your current bonus: &b%treasurefind%"));
-            spelunkerLore.add(Utils.chat("&7next bonus: &b%(treasurefind + .05)%"));
+            spelunkerLore.add(Utils.chat("&7Your current bonus: &b"+ pTreasureFind));
+            spelunkerLore.add(Utils.chat("&7next bonus: &b" + String.valueOf((double) (Math.round(pFortune*100)/100 +.05))));
             spelunkerLore.add(Utils.chat(""));
             spelunkerLore.add(Utils.chat("&8&o(click to expand)"));
 
@@ -81,8 +83,8 @@ public class SkillsCommand implements CommandExecutor {
             demoLitionistLore.add(Utils.chat(""));
             demoLitionistLore.add(Utils.chat("&7The demolitionist skill increases your &cSwing Strength&7!"));
             demoLitionistLore.add(Utils.chat("&7Progress: &f%demoprogress%"));
-            demoLitionistLore.add(Utils.chat("&7Your current bonus: &c%swingstrength%"));
-            demoLitionistLore.add(Utils.chat("&7next bonus: &c%(swingstrength + 1)%"));
+            demoLitionistLore.add(Utils.chat("&7Your current bonus: &c" + pSwingStrength));
+            demoLitionistLore.add(Utils.chat("&7next bonus: &c" + String.valueOf(pSwingStrength+1)));
             demoLitionistLore.add(Utils.chat(""));
             demoLitionistLore.add(Utils.chat("&8&o(click to expand)"));
 
