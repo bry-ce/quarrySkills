@@ -144,28 +144,6 @@ public class Database {
         }
     }
 
-    public double fetchGeoXpByUUID(String uuid){
-        PreparedStatement statement = null;
-        try {
-            statement = getConnection()
-                    .prepareStatement("SELECT geologist_xp FROM player_skill_xp WHERE uuid = ?");
-
-
-            statement.setString(1, uuid);
-            ResultSet results = statement.executeQuery();
-
-            if(results.next()) {
-                double d = results.getDouble(1);
-                statement.close();
-                return d;
-            }
-
-            return 0;
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public double fetchTreasureFindByUUID(String uuid){
         PreparedStatement statement = null;
@@ -190,28 +168,7 @@ public class Database {
         }
     }
 
-    public double fetchSpelunkerXpByUUID(String uuid){
-        PreparedStatement statement = null;
-        try {
-            statement = getConnection()
-                    .prepareStatement("SELECT spelunker_xp FROM player_skill_xp WHERE uuid = ?");
 
-
-            statement.setString(1, uuid);
-            ResultSet results = statement.executeQuery();
-
-            if(results.next()) {
-                double d = results.getDouble(1);
-                statement.close();
-                return d;
-            }
-
-            return 0;
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     public int fetchSwingStrengthByUUID(String uuid){
         PreparedStatement statement = null;
@@ -236,17 +193,18 @@ public class Database {
         }
     }
 
-    public double fetchDemoXpByUUID(String uuid){
+
+
+    public double fetchSkillXPByUUID(String uuid, String xp_column_name){
         PreparedStatement statement = null;
         try {
-            statement = getConnection()
-                    .prepareStatement("SELECT demolitionist_xp FROM player_skill_xp WHERE uuid = ?");
+            statement.getConnection().prepareStatement("SELECT ? FROM player_skill_xp WHERE uuid = ?");
+            statement.setString(1, xp_column_name);
+            statement.setString(2, uuid);
 
-
-            statement.setString(1, uuid);
             ResultSet results = statement.executeQuery();
 
-            if(results.next()) {
+            if (results.next()){
                 double d = results.getDouble(1);
                 statement.close();
                 return d;
@@ -254,8 +212,8 @@ public class Database {
 
             return 0;
 
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        } catch (SQLException ex){
+            throw new RuntimeException(ex);
         }
     }
 

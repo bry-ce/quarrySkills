@@ -11,8 +11,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 
 public class GeologyInventory {
-    public static Inventory createGeologyInventory(Player p) {
-        Inventory geoInv = Bukkit.createInventory(p, 54, Utils.chat("&8Geology"));
+    public static Inventory createGeologyInventory(Player p, String playerSkillLevel) {
+        Inventory geoInv = Bukkit.createInventory(p, 54, Utils.chat("&8Geology " + playerSkillLevel));
         ItemStack grayPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
         ItemMeta blankName = grayPane.getItemMeta();
         blankName.setDisplayName("");
