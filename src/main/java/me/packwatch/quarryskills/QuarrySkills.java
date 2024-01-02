@@ -1,5 +1,8 @@
 package me.packwatch.quarryskills;
 
+import me.neznamy.tab.api.TabAPI;
+import me.neznamy.tab.api.event.plugin.PlaceholderRegisterEvent;
+import me.neznamy.tab.api.placeholder.PlaceholderManager;
 import me.packwatch.quarryskills.commands.SkillsCommand;
 import me.packwatch.quarryskills.db.Database;
 import me.packwatch.quarryskills.events.InvInteractListener;
@@ -24,10 +27,11 @@ public final class QuarrySkills extends JavaPlugin {
             throw new RuntimeException(ex);
         }
 
+
         // Plugin startup logic
         getCommand("skills").setExecutor(new SkillsCommand(this));
         getServer().getPluginManager().registerEvents(new InvInteractListener(), this);
-        getServer().getPluginManager().registerEvents(new JoinListener(this), this);
+        getServer().getPluginManager().registerEvents(new JoinListener(this, TabAPI.getInstance()), this);
     }
 
     public Database getDatabase() {
