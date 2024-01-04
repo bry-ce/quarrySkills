@@ -59,6 +59,36 @@ public class OreMineListener implements Listener {
                 throw new RuntimeException(ex);
             }
 
+        } else if (m.equals(Material.REDSTONE_ORE)) {
+            double coinsperblock = 4*pd.getFortune();
+            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(Utils.chat("&6⛂&7 +" + String.valueOf(coinsperblock))));
+            pd.setCoins(pd.getCoins()+coinsperblock);
+            try {
+                this.plugin.getDatabase().updatePlayerData(pd);
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
+        } else if (m.equals(Material.DIAMOND_ORE)) {
+            double coinsperblock = 6*pd.getFortune();
+            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(Utils.chat("&6⛂&7 +" + String.valueOf(coinsperblock))));
+            pd.setCoins(pd.getCoins()+coinsperblock);
+            try {
+                this.plugin.getDatabase().updatePlayerData(pd);
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
+        } else if (m.equals(Material.AMETHYST_BLOCK)) {
+            double coinsperblock = 10*pd.getFortune();
+            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(Utils.chat("&6⛂&7 +" + String.valueOf(coinsperblock))));
+            pd.setCoins(pd.getCoins()+coinsperblock);
+            try {
+                this.plugin.getDatabase().updatePlayerData(pd);
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
         }
     }
 }
