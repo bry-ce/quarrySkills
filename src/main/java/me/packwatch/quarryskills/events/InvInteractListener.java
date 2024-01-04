@@ -1,9 +1,11 @@
 package me.packwatch.quarryskills.events;
 
 import me.packwatch.quarryskills.QuarrySkills;
+import me.packwatch.quarryskills.commands.SkillsCommand;
 import me.packwatch.quarryskills.db.Database;
 import me.packwatch.quarryskills.utils.GeologyInventory;
 import me.packwatch.quarryskills.utils.SkillXpConverter;
+import me.packwatch.quarryskills.utils.SpelunkerInventory;
 import me.packwatch.quarryskills.utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -24,7 +26,6 @@ import java.util.ArrayList;
 public class InvInteractListener implements Listener {
 
     private final QuarrySkills plugin;
-    private final int[] skill_requirements = {100, 200, 250, 400, 500, 750, 900, 1000, 1250, 1500, 1650, 1750, 1850, 2000, 2500, 3000, 3500, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 15000};
     public InvInteractListener(QuarrySkills plugin) {
         this.plugin = plugin;
     }
@@ -40,19 +41,23 @@ public class InvInteractListener implements Listener {
             switch(e.getCurrentItem().getType()) {
                 case CHISELED_DEEPSLATE:
 
-                    p.openInventory(GeologyInventory.createGeologyInventory(p, String.valueOf(SkillXpConverter.skillXpToLvlAndOverflow((this.plugin.getDatabase().fetchSkillXPByUUID(p.getUniqueId().toString(), "geologist_xp")), this.skill_requirements)[0])));
+                    p.openInventory(GeologyInventory.createGeologyInventory(p));
 
                     break;
                 case CHIPPED_ANVIL:
-                    //p.performCommand(skillsdemolitionist)
+
+
                     break;
                 case SPYGLASS:
-                    //p.performCommand(skillsspelunker)
+                    p.openInventory(SpelunkerInventory.createSpelunkerInventory(p));
                     break;
             }
 
-        } else if (e.getView().getTitle().equalsIgnoreCase(Utils.chat("&8Geology"))){
+        } else if (e.getView().getTitle().equalsIgnoreCase(Utils.chat("&8Geology")) || e.getView().getTitle().equalsIgnoreCase(Utils.chat("&8Spelunker"))){
             e.setCancelled(true);
+            if(e.getCurrentItem().getType() == Material.BOOK){
+                p.openInventory(SkillsCommand.mainGui(p, this.plugin.getDatabase() ));
+            }
         }
 
     }

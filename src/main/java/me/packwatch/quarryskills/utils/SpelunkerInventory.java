@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class SpelunkerInventory {
 
-    public static Inventory createGeologyInventory(Player p) {
+    public static Inventory createSpelunkerInventory(Player p) {
         Inventory spelInv = Bukkit.createInventory(p, 54, Utils.chat("&8Spelunker"));
         ItemStack grayPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
 
@@ -133,7 +133,7 @@ public class SpelunkerInventory {
     }
     private static void allTileMeta(ItemStack i, ItemMeta m, int level){
         i.setAmount(level);
-        m.setDisplayName(Utils.chat("&Spelunker&b " + level));
+        m.setDisplayName(Utils.chat("&6Spelunker&b " + level));
         m.setLore(tileLore(level));
         i.setItemMeta(m);
     }

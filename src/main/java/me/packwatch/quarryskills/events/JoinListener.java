@@ -21,17 +21,17 @@ public class JoinListener implements Listener {
         this.tabAPI = tabAPI;
     }
 
+
     @EventHandler
     public void onFirstJoin(PlayerJoinEvent e){
         //Create playerdata if none exists
         Player p = e.getPlayer();
         this.tabAPI.getPlaceholderManager().registerPlayerPlaceholder("%fortune%", 1000, player -> this.plugin.getDatabase().fetchFortuneByUUID(p.getUniqueId().toString()));
         PlayerData data = null;
-        try {
-            data = this.plugin.getDatabase().findPlayerDataByUUID(p.getUniqueId().toString());
-        } catch (SQLException ex) {
-            throw new RuntimeException(ex);
-        }
+
+        data = this.plugin.getDatabase().findPlayerDataByUUID(p.getUniqueId().toString());
+        PlayerData finalData = data;
+        this.tabAPI.getPlaceholderManager().registerPlayerPlaceholder("%coins%", 50, player -> finalData.getCoins());
 
         if (data == null){
             data = new PlayerData(p.getUniqueId().toString(), 0, 0, 0, 1.0, 0.0,1);

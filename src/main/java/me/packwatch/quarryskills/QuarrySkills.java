@@ -3,10 +3,12 @@ package me.packwatch.quarryskills;
 import me.neznamy.tab.api.TabAPI;
 import me.neznamy.tab.api.event.plugin.PlaceholderRegisterEvent;
 import me.neznamy.tab.api.placeholder.PlaceholderManager;
+import me.packwatch.quarryskills.commands.ReloadCommand;
 import me.packwatch.quarryskills.commands.SkillsCommand;
 import me.packwatch.quarryskills.db.Database;
 import me.packwatch.quarryskills.events.InvInteractListener;
 import me.packwatch.quarryskills.events.JoinListener;
+import me.packwatch.quarryskills.events.OreMineListener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
@@ -30,8 +32,10 @@ public final class QuarrySkills extends JavaPlugin {
 
         // Plugin startup logic
         getCommand("skills").setExecutor(new SkillsCommand(this));
+        getCommand("quarryskills").setExecutor(new ReloadCommand());
         getServer().getPluginManager().registerEvents(new InvInteractListener(this), this);
         getServer().getPluginManager().registerEvents(new JoinListener(this, TabAPI.getInstance()), this);
+        getServer().getPluginManager().registerEvents(new OreMineListener(this, TabAPI.getInstance()), this);
     }
 
     public Database getDatabase() {

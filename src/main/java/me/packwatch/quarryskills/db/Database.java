@@ -40,28 +40,31 @@ public class Database {
 
     }
 
-    public PlayerData findPlayerDataByUUID(String uuid) throws SQLException {
-        PreparedStatement statement = getConnection().prepareStatement("SELECT * FROM player_data WHERE uuid = ?");
-        statement.setString(1,uuid);
+    public PlayerData findPlayerDataByUUID(String uuid)  {
+        try {
+            PreparedStatement statement = getConnection().prepareStatement("SELECT * FROM player_data WHERE uuid = ?");
+            statement.setString(1, uuid);
 
-        ResultSet results = statement.executeQuery();
+            ResultSet results = statement.executeQuery();
 
 
+            if (results.next()) {
+                int shards = results.getInt("shards");
+                double coins = results.getDouble("coins");
+                int pebbles = results.getInt("pebbles");
+                double fortune = results.getInt("fortune");
+                double treasure_find = results.getInt("treasure_find");
+                int swing_strength = results.getInt("swing_strength");
 
-        if (results.next()){
-            int shards = results.getInt("shards");
-            double coins = results.getDouble("coins");
-            int pebbles = results.getInt("pebbles");
-            double fortune = results.getInt("fortune");
-            double treasure_find = results.getInt("treasure_find");
-            int swing_strength = results.getInt("swing_strength");
+                PlayerData playerData = new PlayerData(uuid, shards, coins, pebbles, fortune, treasure_find, swing_strength);
+                statement.close();
 
-            PlayerData playerData = new PlayerData(uuid, shards, coins, pebbles, fortune, treasure_find, swing_strength);
-            statement.close();
-
-            return playerData;
+                return playerData;
+            }
+            return null;
+        } catch (SQLException ex){
+            throw new RuntimeException(ex);
         }
-        return null;
     }
 
 
@@ -107,12 +110,12 @@ public class Database {
 
 
         if (results.next()){
-            int geolvl = results.getInt("shards");
-            int spellvl = results.getInt("coins");
-            int demolvl = results.getInt("pebbles");
-            double geoxp = results.getDouble("fortune");
-            double spelxp = results.getDouble("treasure_find");
-            double demoxp = results.getDouble("swing_strength");
+            int geolvl = results.getInt("geologist_level");
+            int spellvl = results.getInt("spelunker_level");
+            int demolvl = results.getInt("demolitionist_level");
+            double geoxp = results.getDouble("geologist_xp");
+            double spelxp = results.getDouble("spelunker_xp");
+            double demoxp = results.getDouble("demolitionist_xp");
 
             PlayerSkillXP pxp = new PlayerSkillXP(uuid, geoxp, spelxp, demoxp, geolvl, spellvl, demolvl);
             statement.close();
@@ -198,9 +201,9 @@ public class Database {
     public double fetchSkillXPByUUID(String uuid, String xp_column_name){
         PreparedStatement statement = null;
         try {
-            statement.getConnection().prepareStatement("SELECT ? FROM player_skill_xp WHERE uuid = ?");
-            statement.setString(1, xp_column_name);
-            statement.setString(2, uuid);
+            statement = getConnection().prepareStatement("SELECT geologist_xp FROM player_skill_xp WHERE uuid = ?");
+            //statement.setString(1, xp_column_name);
+            statement.setString(1, uuid);
 
             ResultSet results = statement.executeQuery();
 
@@ -215,6 +218,17 @@ public class Database {
         } catch (SQLException ex){
             throw new RuntimeException(ex);
         }
+    }
+
+    public void updatePlayerData(PlayerData pd) throws SQLException{
+        PreparedStatement statement = getConnection()
+                .prepareStatement("UPDATE player_data SET coins = ? WHERE uuid = ?");
+
+        statement.setDouble(1, pd.getCoins());
+        statement.setString(2, pd.getUuid());
+
+        statement.executeUpdate();
+        statement.close();
     }
 
 }
