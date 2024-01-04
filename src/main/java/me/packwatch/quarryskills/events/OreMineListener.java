@@ -49,6 +49,8 @@ public class OreMineListener implements Listener {
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
+            this.tabAPI.getPlaceholderManager().registerPlayerPlaceholder("%coins%", 50, player -> pd.getCoins());
+
         } else if (m.equals(Material.GOLD_ORE)) {
             double coinsperblock = 2.5*pd.getFortune();
             p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(Utils.chat("&6⛂&7 +" + String.valueOf(coinsperblock))));
@@ -58,6 +60,7 @@ public class OreMineListener implements Listener {
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
+            this.tabAPI.getPlaceholderManager().registerPlayerPlaceholder("%coins%", 50, player -> pd.getCoins());
 
         } else if (m.equals(Material.REDSTONE_ORE)) {
             double coinsperblock = 4*pd.getFortune();
@@ -68,6 +71,7 @@ public class OreMineListener implements Listener {
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
+            this.tabAPI.getPlaceholderManager().registerPlayerPlaceholder("%coins%", 50, player -> pd.getCoins());
 
         } else if (m.equals(Material.DIAMOND_ORE)) {
             double coinsperblock = 6*pd.getFortune();
@@ -78,6 +82,7 @@ public class OreMineListener implements Listener {
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
+            this.tabAPI.getPlaceholderManager().registerPlayerPlaceholder("%coins%", 50, player -> pd.getCoins());
 
         } else if (m.equals(Material.AMETHYST_BLOCK)) {
             double coinsperblock = 10*pd.getFortune();
@@ -88,6 +93,7 @@ public class OreMineListener implements Listener {
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
+            this.tabAPI.getPlaceholderManager().registerPlayerPlaceholder("%coins%", 50, player -> pd.getCoins());
 
         }
     }
