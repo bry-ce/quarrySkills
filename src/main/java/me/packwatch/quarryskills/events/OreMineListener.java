@@ -28,8 +28,9 @@ public class OreMineListener implements Listener {
         Player p = e.getPlayer();
         Material m = e.getBlock().getType();
         PlayerData pd = this.plugin.getDatabase().findPlayerDataByUUID(p.getUniqueId().toString());
-        double coinsperblock = 1*pd.getFortune();
+
         if (m.equals(Material.COAL_ORE)){
+            double coinsperblock = 1*pd.getFortune();
             p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(Utils.chat("&6⛂&7 +" + String.valueOf(coinsperblock))));
             pd.setCoins(pd.getCoins()+coinsperblock);
             try {
@@ -38,6 +39,25 @@ public class OreMineListener implements Listener {
                 throw new RuntimeException(ex);
             }
             this.tabAPI.getPlaceholderManager().registerPlayerPlaceholder("%coins%", 50, player -> pd.getCoins());
+
+        } else if (m.equals(Material.IRON_ORE)){
+            double coinsperblock = 1.5*pd.getFortune();
+            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(Utils.chat("&6⛂&7 +" + String.valueOf(coinsperblock))));
+            pd.setCoins(pd.getCoins()+coinsperblock);
+            try {
+                this.plugin.getDatabase().updatePlayerData(pd);
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+        } else if (m.equals(Material.GOLD_ORE)) {
+            double coinsperblock = 2.5*pd.getFortune();
+            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(Utils.chat("&6⛂&7 +" + String.valueOf(coinsperblock))));
+            pd.setCoins(pd.getCoins()+coinsperblock);
+            try {
+                this.plugin.getDatabase().updatePlayerData(pd);
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
 
         }
     }
