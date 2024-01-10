@@ -33,10 +33,27 @@ public class SkillsCommand implements CommandExecutor {
     }
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-        if (commandSender instanceof Player){
+        if (commandSender instanceof Player) {
 
             Player p = (Player) commandSender;
-            double d = this.plugin.getDatabase().fetchSkillXPByUUID(p.getUniqueId().toString(), "geologist_xp");
+            double gxp;
+            try {
+                gxp = this.plugin.getDatabase().findPlayerSkillXpByUUID(p.getUniqueId().toString()).getGeologistXp();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            double sxp;
+            try {
+                sxp = this.plugin.getDatabase().findPlayerSkillXpByUUID(p.getUniqueId().toString()).getSpelunkerXp();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            double dxp;
+            try {
+                dxp = this.plugin.getDatabase().findPlayerSkillXpByUUID(p.getUniqueId().toString()).getDemolitionistXp();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
 
             double pFortune = this.plugin.getDatabase().fetchFortuneByUUID(p.getUniqueId().toString());
             int pSwingStrength = this.plugin.getDatabase().fetchSwingStrengthByUUID(p.getUniqueId().toString());
@@ -52,13 +69,14 @@ public class SkillsCommand implements CommandExecutor {
 
 
             ItemMeta geologyMeta = geology.getItemMeta();
-            geologyMeta.setDisplayName(Utils.chat("&bGeology level " + String.valueOf(SkillXpConverter.skillXpToLvlAndOverflow(d, this.skill_requirements)[0])));
+            geologyMeta.setDisplayName(Utils.chat("&bGeology level " + String.valueOf(SkillXpConverter.skillXpToLvlAndOverflow(gxp, this.skill_requirements)[0])));
             ArrayList<String> geologyLore = new ArrayList<>();
             geologyLore.add(Utils.chat(""));
             geologyLore.add(Utils.chat("&7The geology skill increases your &6Fortune&7!"));
             geologyLore.add(Utils.chat("&7Progress: &f%geoprogress%"));
-            geologyLore.add(Utils.chat("&7Your current bonus: "+ pFortune ));
-            geologyLore.add(Utils.chat("&7next bonus: &6" + String.valueOf((double) (Math.round(pFortune*100)/100 +.1))));
+            geologyLore.add(Utils.chat("&7Your current bonus: " + pFortune));
+            geologyLore.add(Utils.chat("&7next bonus: &6" + String.valueOf((double) (Math.round(pFortune * 100) / 100 + .1))));
+            geologyLore.add(Utils.chat("&bProgress: (" + String.valueOf(SkillXpConverter.skillXpToLvlAndOverflow(gxp, this.skill_requirements)[1]) + "/" + this.skill_requirements[(int) SkillXpConverter.skillXpToLvlAndOverflow(gxp, this.skill_requirements)[0]] + ") %" + String.valueOf(SkillXpConverter.skillXpToLvlAndOverflow(gxp, this.skill_requirements)[2])));
             geologyLore.add(Utils.chat(""));
             geologyLore.add(Utils.chat("&8&o(click to expand)"));
 
@@ -72,8 +90,9 @@ public class SkillsCommand implements CommandExecutor {
             spelunkerLore.add(Utils.chat(""));
             spelunkerLore.add(Utils.chat("&7The spelunker skill increases your &bTreasure Find&7!"));
             spelunkerLore.add(Utils.chat("&7Progress: &f%spelprogress%"));
-            spelunkerLore.add(Utils.chat("&7Your current bonus: &b"+ pTreasureFind));
-            spelunkerLore.add(Utils.chat("&7next bonus: &b" + String.valueOf((double) (Math.round(pFortune*100)/100 +.05))));
+            spelunkerLore.add(Utils.chat("&7Your current bonus: &b" + pTreasureFind));
+            spelunkerLore.add(Utils.chat("&7next bonus: &b" + String.valueOf((double) (Math.round(pFortune * 100) / 100 + .05))));
+            geologyLore.add(Utils.chat("&bProgress: (" + String.valueOf(SkillXpConverter.skillXpToLvlAndOverflow(sxp, this.skill_requirements)[1]) + "/" + this.skill_requirements[(int) SkillXpConverter.skillXpToLvlAndOverflow(sxp, this.skill_requirements)[0]] + ") %" + String.valueOf(SkillXpConverter.skillXpToLvlAndOverflow(sxp, this.skill_requirements)[2])));
             spelunkerLore.add(Utils.chat(""));
             spelunkerLore.add(Utils.chat("&8&o(click to expand)"));
 
@@ -88,7 +107,9 @@ public class SkillsCommand implements CommandExecutor {
             demoLitionistLore.add(Utils.chat("&7The demolitionist skill increases your &cSwing Strength&7!"));
             demoLitionistLore.add(Utils.chat("&7Progress: &f%demoprogress%"));
             demoLitionistLore.add(Utils.chat("&7Your current bonus: &c" + pSwingStrength));
-            demoLitionistLore.add(Utils.chat("&7next bonus: &c" + String.valueOf(pSwingStrength+1)));
+            demoLitionistLore.add(Utils.chat("&7next bonus: &c" + String.valueOf(pSwingStrength + 1)));
+            geologyLore.add(Utils.chat("&bProgress: (" + String.valueOf(SkillXpConverter.skillXpToLvlAndOverflow(dxp, this.skill_requirements)[1]) + "/" + this.skill_requirements[(int) SkillXpConverter.skillXpToLvlAndOverflow(dxp, this.skill_requirements)[0]] + ") %" + String.valueOf(SkillXpConverter.skillXpToLvlAndOverflow(dxp, this.skill_requirements)[2])));
+
             demoLitionistLore.add(Utils.chat(""));
             demoLitionistLore.add(Utils.chat("&8&o(click to expand)"));
 
@@ -104,8 +125,8 @@ public class SkillsCommand implements CommandExecutor {
             m.setDisplayName("");
             graypane.setItemMeta(m);
 
-            for(int i = 0; i < mainGui.getSize(); i++){
-                if(i != 11 && i != 13 && i != 15) {
+            for (int i = 0; i < mainGui.getSize(); i++) {
+                if (i != 11 && i != 13 && i != 15) {
                     mainGui.setItem(i, graypane);
                 }
             }
@@ -123,7 +144,7 @@ public class SkillsCommand implements CommandExecutor {
     }
 
     public static Inventory mainGui(Player p, Database db){
-        double d = db.fetchSkillXPByUUID(p.getUniqueId().toString(), "geologist_xp");
+        double d = db.fetchSkillXPByUUID(p.getUniqueId().toString());
         final int[] skill_requirements = {100, 200, 250, 400, 500, 750, 900, 1000, 1250, 1500, 1650, 1750, 1850, 2000, 2500, 3000, 3500, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 15000};
 
         double pFortune = db.fetchFortuneByUUID(p.getUniqueId().toString());

@@ -2,7 +2,6 @@ package me.packwatch.quarryskills.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -15,16 +14,17 @@ public class GeologyInventory {
         Inventory geoInv = Bukkit.createInventory(p, 54, Utils.chat("&8Geology"));
         ItemStack grayPane = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
         ItemMeta blankName = grayPane.getItemMeta();
+        assert blankName != null;
         blankName.setDisplayName("");
         grayPane.setItemMeta(blankName);
 
         ItemStack levelPane = new ItemStack(Material.RED_STAINED_GLASS_PANE);
         ItemMeta levelMeta = levelPane.getItemMeta();
 
-        ItemStack infoBook = new ItemStack(Material.BOOK);
 
 
         int level = 0;
+        assert levelMeta != null;
         levelMeta.setDisplayName(Utils.chat("&aGeology&b " + level));
         levelPane.setItemMeta(levelMeta);
 
@@ -150,7 +150,7 @@ public class GeologyInventory {
         ArrayList<String> levelLore = new ArrayList<>();
         levelLore.add(Utils.chat("&7Rewards:"));
         levelLore.add(Utils.chat("  &eFortunate Miner " + level));
-        levelLore.add(Utils.chat("      &fGrants you &a+&8"+ String.valueOf(Math.round((level-1)*0.1*1000)/100) + "⇰&a"+String.valueOf(Math.round((level*0.1)*1000)/100) + " &6Fortune"));
+        levelLore.add(Utils.chat("      &fGrants you &a+&8"+ (Math.round((level-1)*0.1*1000)/100) + "⇰&a" + (Math.round((level*0.1)*1000)/100) + " &6Fortune"));
         levelLore.add(Utils.chat("      &fwhich increases the amount of &3shards &fyou"));
         levelLore.add(Utils.chat("      &fgain from mining any ore, as a flat multiplier."));
 

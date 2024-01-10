@@ -2,9 +2,7 @@ package me.packwatch.quarryskills.db;
 
 import me.packwatch.quarryskills.model.PlayerData;
 import me.packwatch.quarryskills.model.PlayerSkillXP;
-import org.bukkit.entity.Player;
 
-import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 
 public class Database {
@@ -126,9 +124,8 @@ public class Database {
     }
 
     public double fetchFortuneByUUID(String uuid) {
-        PreparedStatement statement = null;
         try {
-            statement = getConnection()
+            PreparedStatement statement = getConnection()
                     .prepareStatement("SELECT fortune FROM player_data WHERE uuid = ?");
 
             statement.setString(1, uuid);
@@ -149,9 +146,8 @@ public class Database {
 
 
     public double fetchTreasureFindByUUID(String uuid){
-        PreparedStatement statement = null;
         try {
-            statement = getConnection()
+            PreparedStatement statement = getConnection()
                     .prepareStatement("SELECT treasure_find FROM player_data WHERE uuid = ?");
 
 
@@ -174,9 +170,8 @@ public class Database {
 
 
     public int fetchSwingStrengthByUUID(String uuid){
-        PreparedStatement statement = null;
         try {
-            statement = getConnection()
+            PreparedStatement statement = getConnection()
                     .prepareStatement("SELECT swing_strength FROM player_data WHERE uuid = ?");
 
 
@@ -198,10 +193,9 @@ public class Database {
 
 
 
-    public double fetchSkillXPByUUID(String uuid, String xp_column_name){
-        PreparedStatement statement = null;
+    public double fetchSkillXPByUUID(String uuid){
         try {
-            statement = getConnection().prepareStatement("SELECT geologist_xp FROM player_skill_xp WHERE uuid = ?");
+            PreparedStatement statement = getConnection().prepareStatement("SELECT geologist_xp FROM player_skill_xp WHERE uuid = ?");
             //statement.setString(1, xp_column_name);
             statement.setString(1, uuid);
 
