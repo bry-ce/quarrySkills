@@ -2,6 +2,7 @@ package me.packwatch.quarryskills.events;
 
 import me.packwatch.quarryskills.QuarrySkills;
 import me.packwatch.quarryskills.commands.SkillsCommand;
+import me.packwatch.quarryskills.utils.DemoInventory;
 import me.packwatch.quarryskills.utils.GeologyInventory;
 import me.packwatch.quarryskills.utils.SpelunkerInventory;
 import me.packwatch.quarryskills.utils.Utils;
@@ -37,6 +38,7 @@ public class InvInteractListener implements Listener {
                     break;
                 case CHIPPED_ANVIL:
 
+                    p.openInventory(DemoInventory.createDemoInventory(p));
 
                     break;
                 case SPYGLASS:
